@@ -22,6 +22,7 @@ void unahm(const std::string& filename){
 	Bitstream stream(file,BUFFERSIZE);
 	AdaptiveHuffmanTree tree;
 	int numChars =0;
+	int elemsRead;
 
 	if(file == nullptr){
 		std::cerr << "Could not open file:" << filename << std::endl;
@@ -29,7 +30,12 @@ void unahm(const std::string& filename){
 	}
 
 	// get number of characters of the result file
-	fread(&numChars,sizeof(int),1,file);
+	elemsRead = fread(&numChars,sizeof(int),1,file);
+
+	if(elemsRead != 1){
+		std::cerr << "Could not read number of characters encoded" << std::endl;
+		exit(1);
+	}
 
 	if(DEBUG){
 		std::cout << "Num chars:" << numChars << std::endl;

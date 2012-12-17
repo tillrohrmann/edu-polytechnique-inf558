@@ -80,6 +80,7 @@ void transformFile(const std::string & filename){
 	unsigned char* output = nullptr;
 	int actualSize;
 	int firstLine;
+	int elemsRead;
 
 	if(file == nullptr){
 		std::cerr << "Could not open file:" << filename<< std::endl;
@@ -87,19 +88,29 @@ void transformFile(const std::string & filename){
 	}
 
 	// read blocksize of encoded file (always the first int in the file)
-	fread(&blocksize,sizeof(int),1,file);
+	elemsRead = fread(&blocksize,sizeof(int),1,file);
+
+	if(elemsRead != 1){
+		std::cerr << "Could not read the blocksize of the encoded block"  << std::endl;
+		exit(1);
+	}
 
 	buffer = new unsigned char[blocksize];
 	output = new unsigned char[blocksize];
 
 	// read first line information (always at the beginning of a block)
-	fread(&firstLine,sizeof(int),1,file);
+	elemsRead = fread(&firstLine,sizeof(int),1,file);
+
+	if(elemsRead != 1){
+		std::cerr << "Could not read the firstline information of an encoded block" << std::endl;
+		exit(1);
+	}
 	while((actualSize = readDataBlock(file,buffer,blocksize))>0){
 
 		// calculate inverse burrows wheeler transformation
 		unbwt(firstLine,buffer,actualSize,output);
 
-		fread(&firstLine,sizeof(int),1,file);
+		elemsRead = fread(&firstLine,sizeof(int),1,file);
 		fwrite(output,1,actualSize,stdout);
 	}
 
