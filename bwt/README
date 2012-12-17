@@ -1,0 +1,59 @@
+Compilation:
+For the compilation it is necessary to have a gcc compiler which supports 
+the compiler option -std=c++11.
+
+Running the programs:
+The project consists of three programs.
+1. bwt/unbwt:
+-------------
+bwt performs the Burrows-Wheeler transformation. 
+unbwt performs the inverse Burrows-Wheeler transformation.
+
+bwt awaits as arguments a path to a file and the blocksize in bytes which is used for the BWT.
+
+Example: ./bwt data2Encode 20000
+
+unbwt awaits only the path to the file
+
+Example: ./unbwt data2Decode
+
+2. mtf/unmtf:
+-------------
+mtf performs the Move-To-Front encoding.
+unmtf performs the inverse Move-To-Front encoding.
+
+mtf awaits as single argument a path to a file which shall be encoded.
+
+Example: ./mtf data2Encode
+
+unmtf awaits as single argument a path to a file which shall be decoded.
+
+Example: ./unmtf data2Decode
+
+3. ahm/unahm:
+-------------
+ahm performs an adaptive Huffman encoding.
+unahm performs the inverse adatpive Huffman encoding.
+
+ahm awaits as single argument a path to a file which shall be encoded.
+
+Example: ./ahm data2Encode
+
+unahm awaits as single argument a path to a file which shall be decoded.
+
+Example: ./unahm data2Decode
+
+Scripts:
+--------
+
+For the ease of usability, we provide also the scrips compress.sh and uncompress.sh which
+automatically execute the complete toolchain.
+
+compress.sh awaits as arguments the path to a file to compress and the block size in bytes for the
+Burrows-Wheeler transformation.
+
+Example: ./compress.sh data2Encode 20000000
+
+uncompress.sh awaits only the path to a file to decompress.
+
+Example: ./uncompress.sh data2Decode

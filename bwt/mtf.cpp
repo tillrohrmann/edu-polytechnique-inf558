@@ -57,6 +57,10 @@ void mtf(const std::string& filename){
 	fclose(file);
 }
 
+/**
+* This program takes as single argument a path to a file which it encodes using the 
+* move to front encoding. The result is outputted on stdout.
+*/
 int main(int argc, char** argv){
 	std::string filename ="";
 

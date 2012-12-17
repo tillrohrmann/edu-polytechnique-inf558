@@ -54,6 +54,10 @@ void ahm(const std::string& filename){
 	fclose(file);
 }
 
+/**
+* This function takes as single argument the path to a file which it encodes using the
+* adaptive Huffman encoding. The result will be outputted on stdout.
+*/
 int main(int argc, char** argv){
 	std::string filename="";
 

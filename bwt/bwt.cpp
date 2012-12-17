@@ -162,6 +162,12 @@ void transformFile(const std::string& filename, int blocksize){
 	delete [] output;
 }
 
+
+/**
+* This program takes as first argument a path to a file which shall be encoded and as a second
+* argument the blocksize of Burrows-Wheeler-Transformation. If no blocksize is specified, then
+* the standard block size of 20000000 bytes will be used. The result is outputted on stdout.
+*/
 int main(int argc, char** argv){
 	std::string filename = "";
 	int blocksize = 0;
