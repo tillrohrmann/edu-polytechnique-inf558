@@ -1,0 +1,86 @@
+\section{BWT}
+
+\begin{frame}
+	\frametitle{Burrows-Wheeler-Transformation}
+	\begin{block}{Idea}
+		\begin{itemize}
+			\item Given an input string $S$ build from the alphabet $X$ with length $|S|=n$
+			\item Calculate all rotations
+			\item Order all rotations lexicographically
+			\item Return the last sign of all rotations in sorted order of rotations and the line index of the original string
+		\end{itemize}
+	\end{block}
+	\begin{itemize}
+		\item BWT groups identical letters together
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Example}
+	\begin{itemize}
+		\item Let $S=$"banana"
+		\item Append end of string sign $"|"\not \in X$ with $\forall x\in X:"|" > x$
+	\end{itemize}
+
+	\begin{displaymath}
+		\begin{tabular}{c}
+		banana|\\
+		anana|b\\
+		nana|ba\\
+		ana|ban\\
+		na|bana\\
+		a|banan\\
+		|banana
+		\end{tabular}
+		\Rightarrow
+		\begin{tabular}{c}
+		anana|b\\
+		ana|ban\\
+		a|banan\\
+		banana|\\
+		nana|ba\\
+		na|bana\\
+		|banana
+		\end{tabular}
+	\end{displaymath}
+	\begin{itemize}
+		\item first line=3 last column=bnn|aaa
+	\end{itemize}	
+\end{frame}
+
+\begin{frame}
+	\frametitle{Virtual end of string character}
+	\begin{itemize}
+		\item Only virtual end of string character
+	\end{itemize}
+	\begin{displaymath}
+		\begin{tabular}{c}
+		anana|b\\
+		ana|ban\\
+		a|banan\\
+		banana|\\
+		nana|ba\\
+		na|bana\\
+		|banana
+		\end{tabular}
+		\Rightarrow
+		\begin{tabular}{c}
+		ananab\\
+		anaban\\
+		abanan\\
+		banana\\
+		nanaba\\
+		nabana
+		\end{tabular}
+	\end{displaymath}
+	\begin{itemize}
+		\item First line is replaced by last line
+		\item Important for decoding
+		\item Sort is realized as quick sort
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Decoding procedure}
+	
+\end{frame}

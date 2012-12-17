@@ -1,0 +1,19 @@
+\section{MTF}
+
+\begin{frame}
+	\frametitle{Move-To-Front Encoding}
+	\begin{block}{Algorithm}
+		\begin{itemize}
+			\item Initially: List $L=[a,b,c,\ldots]$ of all characters in the alphabet $X$ (ASCII code)
+			\item For every character $ch$ do:
+			\begin{enumerate}
+				\item Find $i$ s.t. $ch==L[i]$ and print $i$
+				\item Move $L[i]$ to front of list
+			\end{enumerate}
+		\end{itemize}
+	\end{block}
+	\begin{itemize}
+		\item Encode sequences of identical letters with sequences of $0$
+		\item If input file contains many sequences of identical characters $\Rightarrow$ result file contains primarily low numbers (esp. 0)
+	\end{itemize}
+\end{frame}

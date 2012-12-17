@@ -1,0 +1,31 @@
+\usetheme{Berlin}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{caption}
+\captionsetup{labelformat=empty,labelsep=none}
+\DeclareMathOperator*{\E}{\mathbb{E}}
+
+\title{Burrows-Wheeler Transformation}
+\author[S. Floratos \& T. Rohrmann]{Sofoklis Floratos and Till Rohrmann}
+\institute[École Polytechnique]{École Polytechnique}
+\date{\today}
+\subject{Burrows-Wheeler Transformation}
+
+\begin{document}
+		\frame{\titlepage}
+		\begin{frame}
+			\frametitle{Table of Contents}
+			\tableofcontents
+		\end{frame}
+		\input{Introduction}
+		\input{bwt}
+		\input{mtf}
+		\input{ahm}
+		\input{comparison}
+\end{document}

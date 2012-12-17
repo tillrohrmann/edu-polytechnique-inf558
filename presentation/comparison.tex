@@ -1,0 +1,44 @@
+\section{Comparison}
+
+\begin{frame}
+	\frametitle{Comparison}
+	\begin{itemize}
+		\item Comparison: Compression rate of our implementation, BWT using adaptive arithmetic encoding and Lempel-Ziv (gzip)
+		\item Benchmark: Standard Calgary Corpus
+		\begin{itemize}
+			\item set of 18 files with varying characteristics
+		\end{itemize}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+\small
+\begin{tabular}{l|rrrr}
+File & Orig. Size& Huffman & Arithmetic& Lempel-Ziv\\
+\hline
+bib & 111.3 & 33.3 & 29.6 & 35.1\\
+book1 & 768.8 & 267.2 & 275.8 & 313.4\\
+book2& 610.9 & 187.0 & 186.6 & 206.7\\
+geo & 102.4 & 69.6 & 62.1 & 68.5 \\
+news & 337.1 & 133.5 & 134.2 & 144.9 \\
+obj2 & 246.8 & 88.7 & 81.9 & 81.6\\
+paper1 & 53.161 & 18.2 & 17.7 & 18.6 \\
+paper2 & 82.2 & 28.1 & 27.0 & 29.8\\
+paper3 & 46.5 & 17.2 & 17.0 & 18.1\\
+paper4 & 13.3 & 5.5 & 5.5 & 5.5\\
+pic & 513.2 & 100.3 & 50.8 & 56.4 \\
+progc & 39.6 & 13.6 & 13.3 & 13.3 \\
+progl & 71.6 & 18.7 & 16.7 & 16.3
+\end{tabular}
+
+\end{frame}
+
+\begin{frame}
+	\frametitle{Conclusion}
+	\begin{itemize}
+		\item Average compression rate $\approx 3$
+		\item Adap. arithmetic encoding almost always slightly better
+		\item Adap. Huffman is in 7 of 13 cases better than Lempel-Ziv
+		\item One outlier: pic
+	\end{itemize}
+\end{frame}
