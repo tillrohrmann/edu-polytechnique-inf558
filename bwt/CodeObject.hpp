@@ -10,7 +10,10 @@
 
 #include <string>
 
-
+/**
+ * This class represents binary codes and allows to easily
+ * append codes by 0,1 or other codes
+ */
 class CodeObject{
 private:
 	unsigned char* _data;

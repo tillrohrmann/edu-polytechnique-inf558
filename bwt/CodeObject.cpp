@@ -34,6 +34,7 @@ CodeObject::CodeObject(const CodeObject& ref){
 	_numbits = ref._numbits;
 }
 
+// constructor for rvalues
 CodeObject::CodeObject(CodeObject&& ref){
 	_data = ref._data;
 	ref._data = nullptr;
@@ -50,6 +51,7 @@ CodeObject::~CodeObject(){
 	_numbits = 0;
 }
 
+
 const CodeObject& CodeObject::operator=(const CodeObject& ref){
 	if(_data != nullptr){
 		delete [] _data;
@@ -62,6 +64,9 @@ const CodeObject& CodeObject::operator=(const CodeObject& ref){
 	return *this;
 }
 
+/**
+ * Assignment operator for rvalues
+ */
 CodeObject& CodeObject::operator=(CodeObject&&ref){
 	if(_data != nullptr){
 		delete [] _data;
@@ -79,6 +84,10 @@ void CodeObject::printRest() const{
 	fwrite(_data,1,numbytes(),stdout);
 }
 
+/**
+ * This function appends the code rest to the current code object. Then it
+ * prints all full bytes of the code to stdout and returns the rest of the code.
+ */
 CodeObject CodeObject::printCode(const CodeObject& rest) const{
 
 	if(_numbits==0 && rest._numbits ==0){
@@ -123,6 +132,10 @@ CodeObject CodeObject::printCode(const CodeObject& rest) const{
 
 }
 
+/**
+ * This function appends a 1 to the current code and returns it as a new
+ * CodeObject.
+ */
 CodeObject CodeObject::appendOne(){
 	unsigned char * newdata = nullptr;
 	if(_numbits%8==0){
@@ -143,6 +156,10 @@ CodeObject CodeObject::appendOne(){
 	return CodeObject(newdata,_numbits+1);
 }
 
+/**
+ * This function appends a 0 to the current code and returns it as a new
+ * CodeObject.
+ */
 CodeObject CodeObject::appendZero(){
 	unsigned char * newdata = nullptr;
 	if(_numbits%8==0){
@@ -164,6 +181,10 @@ CodeObject CodeObject::appendZero(){
 	return CodeObject(newdata,_numbits+1);
 }
 
+/**
+ * This function appends the 8 bits of ch to the current code and returns the
+ * result as a new CodeObject
+ */
 CodeObject CodeObject::append(unsigned char ch){
 	unsigned char* newdata = nullptr;
 	newdata = new unsigned char[numbytes()+1];
@@ -182,6 +203,9 @@ CodeObject CodeObject::append(unsigned char ch){
 	return CodeObject(newdata,_numbits+8);
 }
 
+/**
+ * This function converts the current code to a string and returns it.
+ */
 std::string CodeObject::toStr() const{
 	std::string result ="";
 

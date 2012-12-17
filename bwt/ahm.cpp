@@ -15,6 +15,9 @@
 const int BLOCK_SIZE=20000;
 const int OUTPUT_BUFFER_SIZE=10;
 
+/**
+ * This function performs the adaptive Huffman encoding on the file specified by filename
+ */
 void ahm(const std::string& filename){
 	unsigned char buffer[BLOCK_SIZE];
 	unsigned char outputBuffer[OUTPUT_BUFFER_SIZE];
@@ -37,15 +40,14 @@ void ahm(const std::string& filename){
 
 	while((bytesRead = fread(buffer,1,BLOCK_SIZE,file))>0){
 		for(int i =0; i < bytesRead; i++){
-			/*if(counter == 35756)
-				std::cout << "get Code:" << counter << std::endl;*/
+			// encode current character
 			CodeObject codeObject = tree.getCode(buffer[i]);
-			//std::cout << "Print character:" << counter++ << " of " << numberCharacters << std::endl;
+			// print rest.lengh/8 bytes of the code and keep the rest
 			rest= codeObject.printCode(rest);
 			fflush(stdout);
 		}
 	}
-	//std::cout << "Print rest" << std::endl;
+	//print eventually the rest
 	rest.printRest();
 
 

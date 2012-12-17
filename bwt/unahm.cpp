@@ -13,6 +13,10 @@ const int BUFFERSIZE=10;
 
 const bool DEBUG = false;
 
+/**
+ * This functions performs the adaptive Huffman decoding on the file specified by
+ * filename.
+ */
 void unahm(const std::string& filename){
 	FILE* file = fopen(filename.c_str(),"rb");
 	Bitstream stream(file,BUFFERSIZE);
@@ -24,6 +28,7 @@ void unahm(const std::string& filename){
 		exit(1);
 	}
 
+	// get number of characters of the result file
 	fread(&numChars,sizeof(int),1,file);
 
 	if(DEBUG){
@@ -31,6 +36,7 @@ void unahm(const std::string& filename){
 	}
 
 	for(int i =0; i< numChars;i++){
+		//decode next char
 		char ch = tree.getNextChr(stream);
 		fwrite(&ch,1,1,stdout);
 		fflush(stdout);

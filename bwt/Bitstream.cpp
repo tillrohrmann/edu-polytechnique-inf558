@@ -24,6 +24,7 @@ Bitstream::~Bitstream(){
 }
 
 bool Bitstream::hasNextBit(){
+	// if buffer is empty then refill it
 	if(_counter >= _max){
 		reloadBuffer();
 	}
@@ -44,11 +45,16 @@ void Bitstream::reloadBuffer(){
 	}
 }
 
+/**
+ * This function retrieves the next bit from the bitstream
+ */
 unsigned char Bitstream::getNextBit(){
+	// if buffer is empty then refill it
 	if(_counter >= _max){
 		reloadBuffer();
 	}
 
+	// return the next bit
 	if(_counter < _max){
 		unsigned char result =  (_buffer[_counter/8] >> (7-_counter%8))&1;
 		_counter++;
@@ -58,6 +64,10 @@ unsigned char Bitstream::getNextBit(){
 	}
 }
 
+/**
+ * This function reads the next 8 bit and returns it as a character
+ *
+ */
 unsigned char Bitstream::getNextChr(){
 	unsigned char result = 0;
 
@@ -66,6 +76,7 @@ unsigned char Bitstream::getNextChr(){
 	}
 
 	if(_counter < _max){
+		// if the complete 8 bits can be read from the buffer
 		if(_counter+8 <= _max){
 			if(_counter%8==0){
 				result = _buffer[_counter/8];
@@ -74,7 +85,9 @@ unsigned char Bitstream::getNextChr(){
 				result |= _buffer[_counter/8+1] >> (8-(_counter%8));
 			}
 			_counter+=8;
-		}else{
+		}
+		// if an additional reloadBuffer has to be executed because there are not enough bits left
+		else{
 			result = _buffer[_counter/8] << (_counter %8);
 			int diff = _counter %8;
 			reloadBuffer();

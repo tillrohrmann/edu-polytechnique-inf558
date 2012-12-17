@@ -10,8 +10,20 @@
 
 #include <stdio.h>
 
+/**
+ * Reads from the file blocksize bytes and stores them in buffer
+ *
+ * @param FILE* file
+ * @param unsigned char* buffer
+ * @param int blocksize
+ *
+ * @return int number of bytes read
+ */
 int readDataBlock(FILE* file,unsigned char* buffer, int blocksize);
 
+/**
+ * Template for quicksosrt algorithm
+ */
 template<typename T>
 void qsort(T* data,int left, int right){
 	if(right - left >= 2){

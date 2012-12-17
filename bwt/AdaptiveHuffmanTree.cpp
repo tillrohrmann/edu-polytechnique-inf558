@@ -36,16 +36,25 @@ void AdaptiveHuffmanTree::deleteTree(Node* root){
 	}
 }
 
+/**
+ * This function updates the Huffman tree by incrementing the weight of node
+ * and restoring the gallager property
+ *
+ * @return bool true iff updateCode has been called for this node and all its children
+ * 				false iff updateCode has not been called
+ */
 bool AdaptiveHuffmanTree::updateNode(Node* node){
 	if(node == nullptr){
 		return false;
 	}
+	//root node
 	if(node->_parent == nullptr){
 		node->_weight++;
 		return false;
 	}else{
 		Node* pre = _gallager[node->_index-1];
 
+		// if true, gallager order stays the same by incrementing the weight of node
 		if(pre->_weight > node->_weight){
 			node->_weight++;
 
@@ -53,14 +62,18 @@ bool AdaptiveHuffmanTree::updateNode(Node* node){
 		}else{
 			int index = node->_index-2;
 
+			// search first node which has a higher weight than node->_weight
 			while(index >=0 && _gallager[index]->_weight <= node->_weight)
 				index--;
 
+			// the node with which node will be swapped to restore gallager order
 			pre = _gallager[index+1];
 
+			// calculate position where the nodes are attached to their parents
 			bool nodeLeft = node->_parent->_left == node;
 			bool preLeft = pre->_parent->_left == pre;
 
+			//exchange pre and node
 			if(nodeLeft){
 				node->_parent->_left = pre;
 			}else
@@ -76,8 +89,10 @@ bool AdaptiveHuffmanTree::updateNode(Node* node){
 			pre->_parent = node->_parent;
 			node->_parent = swap;
 
+			// update code of the swapped node
 			updateCode(pre);
 
+			// swap gallager mapping
 			_gallager[node->_index] = pre;
 			_gallager[pre->_index] = node;
 
@@ -87,6 +102,7 @@ bool AdaptiveHuffmanTree::updateNode(Node* node){
 
 			node->_weight++;
 
+			//update the parent node as well
 			if(!updateNode(node->_parent)){
 				updateCode(node);
 			}
@@ -96,6 +112,11 @@ bool AdaptiveHuffmanTree::updateNode(Node* node){
 	}
 }
 
+/**
+ * This function calculates the new code of a node if it has
+ * been moved. It takes the parent code and appends either a 0
+ * or a 1 depending on the side on which it was appended
+ */
 void AdaptiveHuffmanTree::updateCode(Node* node){
 	if(node == nullptr){
 		return;
@@ -114,13 +135,20 @@ void AdaptiveHuffmanTree::updateCode(Node* node){
 	updateCode(node->_right);
 }
 
+/**
+ * This function retrieves the current binary code for the character ch and increases
+ * the weight of this character. Consequently the adaptive Huffman tree will also be
+ * adapted
+ */
 CodeObject AdaptiveHuffmanTree::getCode(unsigned char ch){
 	std::map<unsigned char,Node*>::iterator it;
+	// if there exists a code for the character ch
 	if((it=_mapping.find(ch)) != _mapping.end()){
 		Node* node = it->second;
 
 		CodeObject result = node->_code;
 
+		// update weight of respective node
 		updateNode(node);
 		if(DEBUG){
 			std::cout << std::endl << std::endl << "Old Chr:" << ch << " int: " << (unsigned int)ch << " Code:" << result.toStr() << std::endl << std::endl;
@@ -130,8 +158,11 @@ CodeObject AdaptiveHuffmanTree::getCode(unsigned char ch){
 
 		return result;
 	}else{
+		// the character ch was read for the first time --> get the code of the new sign node
+		// which is situated at the end of the gallager sequence
 		Node* oldSignNode = _gallager[_gallager.size()-1];
 
+		// old sign node is no longer a new sign node
 		oldSignNode->_isNS = false;
 
 		Node* newSignNode = new Node(oldSignNode,nullptr,nullptr,'?',1,_gallager.size()+1,true);
@@ -143,8 +174,11 @@ CodeObject AdaptiveHuffmanTree::getCode(unsigned char ch){
 		oldSignNode->_left = newChNode;
 		oldSignNode->_right = newSignNode;
 
+		// create binary code by append the 8 bit ASCII representation of the character
+		// to the binary code of the new sign node
 		CodeObject result = oldSignNode->_code.append(ch);
 
+		//update the Huffman tree
 		updateNode(oldSignNode);
 		updateCode(newChNode);
 		updateCode(newSignNode);
@@ -154,6 +188,7 @@ CodeObject AdaptiveHuffmanTree::getCode(unsigned char ch){
 			printCodes();
 		}
 
+		// set the new mapping
 		_mapping[ch] = newChNode;
 
 		return result;
@@ -166,7 +201,11 @@ void AdaptiveHuffmanTree::printCodes(){
 	}
 }
 
+/**
+ * This function decodes the next char from the bitstream
+ */
 unsigned char AdaptiveHuffmanTree::getNextChr(Bitstream& stream){
+	// find leaf corresponding to the current sequence on the stream
 	Node * leaf = findLeaf(_root,stream);
 	unsigned char result;
 	if(leaf == nullptr){
@@ -174,31 +213,39 @@ unsigned char AdaptiveHuffmanTree::getNextChr(Bitstream& stream){
 		exit(1);
 	}
 
+	// if the leaf is a new sign node --> oen has to read the next 8 bits to retrieve the next character
 	if(leaf->_isNS){
+		// read complete next 8 bits
 		result = stream.getNextChr();
 
-//		if(DEBUG){
-//			std::string code = leaf->_code.append(result).toStr();
-//
-//			std::cout << "Chr:" << result << " Code:" << code << std::endl;
-//			printCodes();
-//		}
+		if(DEBUG){
+			std::string code = leaf->_code.append(result).toStr();
+
+			std::cout << "Chr:" << result << " Code:" << code << std::endl;
+			printCodes();
+		}
+		// update Huffman tree
 		getCode(result);
 
 		return result;
 	}else{
 		result = leaf->_character;
-//		if(DEBUG){
-//			std::string code = leaf->_code.toStr();
-//
-//			std::cout << "Chr:" << result << " Code:" << code << std::endl;
-//			printCodes();
-//		}
+		if(DEBUG){
+			std::string code = leaf->_code.toStr();
+
+			std::cout << "Chr:" << result << " Code:" << code << std::endl;
+			printCodes();
+		}
+		// update Huffman tree
 		getCode(result);
 		return result;
 	}
 }
 
+/**
+ * This functions reads the bitstream stream until it finds a leaf and returns
+ * the leaf node
+ */
 Node* AdaptiveHuffmanTree::findLeaf(Node* root,Bitstream& stream){
 	if(root->_left ==nullptr && root->_right == nullptr){
 		return root;

@@ -10,6 +10,9 @@
 
 #include "CodeObject.hpp"
 
+/**
+ * This class represents a node of the adaptive Huffman tree
+ */
 class Node{
 public:
 	Node* _parent;
@@ -17,8 +20,11 @@ public:
 	Node* _right;
 	char _character;
 	int _weight;
+	// index of gallager sequence
 	int _index;
+	// current binary code of the node
 	CodeObject _code;
+	// is this node a new sign node?
 	bool _isNS;
 
 	Node();
